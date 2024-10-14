@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <style type="text/css">
+        button {
+           /* width:100%;*/
+           display: block;
+        }
+
+        .zwibbler-builtin-toolbar {
+    width: 82px;}
+
+    </style>
+    <div id="zwibbler" style="margin-left:auto;margin-right:auto;border:2px solid red;width:100%;height:600px; background: #848484; "></div>
+<!--     <input type="button" onclick="onSave()" value="Save"/>
+    <input id="loadButton" type="button" onclick="onLoad()" disabled="disabled" value="Load"/>
+    <input type="button" onclick="onImage()" value="Open as image"/>
+    <input type="button" onclick="zwibbler.onResize()" value="Open as image"/> -->
+    <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="./zwibbler-demo2.js"></script>
+    <script type="text/javascript">
+        var ctx = Zwibbler.create("zwibbler", {
+
+        });
+
+        ctx.createNode("DomNode", {
+   // ID of YouTube video
+    data: "9bZkp7q19f0"
+});
+        ctx.on("convert-dom-request", function(id, dataString) {
+    // Given the data, create a DOM element and call 
+    // ctx.setDomElement for the node.        
+
+
+    var iframe = document.createElement("iframe");
+    iframe.setAttribute("class", "my_video_class");
+    iframe.setAttribute("width", "300");
+    iframe.setAttribute("height", "169");
+    iframe.setAttribute("src", "http://www.youtube.com/embed/" +
+        dataString + "?rel=0");
+    iframe.setAttribute("frameborder", "0");
+
+    /// set a preview to show in the page selector
+    ctx.setNodeProperty(id, "preview",
+        "https://img.youtube.com/vi/" + dataString + "/default.jpg");
+ctx.setDocumentSize(800, 600);
+console.log(ctx);
+    ctx.setDomNode();
+});
+
+        // var saved = null;
+        // function onSave() {
+        //     saved = zwibbler.save("zwibbler3");
+        //     $("#loadButton").removeAttr("disabled");
+        // }
+
+        // function onLoad() {
+        //     zwibbler.load("zwibbler3", saved);
+        // }
+
+        // function onImage() {
+        //     var dataUrl = zwibbler.save("png");
+        //     window.open(dataUrl, "other");
+        // }
+    </script>
+</body>
+</html>

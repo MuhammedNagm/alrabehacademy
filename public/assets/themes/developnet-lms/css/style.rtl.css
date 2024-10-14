@@ -1,0 +1,189 @@
+@import url('//fonts.googleapis.com/earlyaccess/droidarabickufi.css');
+@import url('//fonts.googleapis.com/earlyaccess/droidarabicnaskh.css');
+html, body{ 
+  font-family:  "Droid Arabic Kufi";
+
+}
+
+*{
+  font-family: "Droid Arabic Kufi",'Droid Arabic Naskh',"tahoma" ;
+  letter-spacing: normal !important;
+}
+p, li,
+.event-content .media-heading{
+	font-family: 'Droid Arabic Naskh';
+}
+.navbar-nav,
+.sub-content-details,
+.media,
+.subject-overview,
+.btm-contact-list li,
+.btm-footer,
+.news-letter-sec,
+.list-desc li,
+.wrap-breadcrumb .breadcrumb,
+.page-content,
+.course-nav,
+.course-leeson-section,
+.main-search-from input,
+.quiz-meta,
+.toolbar,
+.contact-us,
+.blogs-content,
+.pagination,
+.pricing-bottom-bottom p,
+.nav.nav-tabs.custom .nav-link,
+.take-course,
+.singl-question,
+.opening-hours .value
+{
+	direction: rtl;
+}
+
+.subject-meta,
+.opening-hours ul li{
+	flex-direction: row-reverse;
+}
+
+.thim-course-info ul li .value,
+.course-item .meta.duration{
+	float: left !important;
+}
+
+.course-item .meta-left{
+	float: right !important;
+}
+
+.widget-title:after,
+.course-side-menu{
+	right: 0 !important;
+	left: auto !important;
+}
+.btm-footer ul li{
+	border-left: 1px solid #777;
+	border-right: transparent;
+}
+.btm-footer ul li:last-child{
+	border-left: transparent;
+}
+.list-desc li i,
+.course-item .course-format-icon{
+	margin-left: 5px;
+	margin-right: 0 !important;
+}
+.main-search-from input{
+	padding-right: 10px;
+}
+.main-search-from button{
+	left: 45px;
+	right: auto; 
+}
+.main-search-from a{
+	left: 3px;
+	right: auto;
+}
+
+/*course*/
+.page-side-title:before{
+	left: auto;
+	right: -16px
+}
+
+.banner-content{
+	width: 100%;
+	text-align: right;
+}
+.banner-content h2 {
+    border-right: 3px solid #e6a022;
+    border-left: 0 !important;
+}
+.thim-course-content ul li{
+	padding-right: 20px;
+	padding-left: 0;
+}
+.thim-course-content ul li:before{
+	left: auto;
+	right: 0;
+}
+.thim-course-content{
+	padding-right: 0 !important;
+	padding-left: 15px;
+}
+.thim-course-info{
+	padding-right: 15;
+	padding-left: 0 !important;
+	border-right: 1px solid #eee;
+	border-left: transparent;
+}
+.curriculum-section-header i{
+	margin-left: 10px;
+	margin-right: 5px;
+}
+.course-side-menu{
+	border-left: 1px solid #eee;
+	border-right: transparent;
+}
+
+/*blogs */
+.blog-main{
+	padding-left: 30px;
+    padding-right: 15px;
+}
+.latest-posts .side-title h3{
+	left: auto;
+	right: -15px;
+}
+.post-meta-content ul{
+	direction: rtl;
+	padding: 0;
+}
+.post-meta-content li i{
+	margin-right: 0;
+	margin-left: 8px;
+}
+.latest-posts img{
+	margin-right: 0;
+}
+.side-search button{
+	right: auto;
+	left: 0;
+}
+.project-info-list{
+	padding-right: 0;
+}
+.post-department{
+	right: 15px;
+	left: auto;
+}
+.course-btn-details,
+.certification-link,
+.bill-link{
+	text-align: left;
+}
+
+/*rating*/
+.rating .half{
+	margin-left: -19px;
+    transform: rotateY(-180deg);
+}
+
+.rating > label { 
+ float: left; 
+}
+/**/
+.print-modal .modal-header .close{
+	right: auto;
+	left: 15px;
+}
+
+.btm-contact-list i{
+	margin-left: 3px;
+}
+
+
+.media-body {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    padding-right: 20px;
+}

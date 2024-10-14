@@ -1,0 +1,10 @@
+{
+    "files.watcherExclude": {
+        "**/node_modules/*/**": true,
+        "**/cache/*/**": true,
+        "**/logs/*/**": true,
+        "**/media/*/**": true
+    },
+    "editor.tabCompletion": "on",
+    "diffEditor.codeLens": true
+}

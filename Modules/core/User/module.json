@@ -1,0 +1,18 @@
+{
+  "code": "corals-user",
+  "name": "User Manager",
+  "author": "Modules",
+  "type": "core",
+  "description": "Manage Users, Roles and Permissions",
+  "namespace": "Modules\\User",
+  "provider": "UserServiceProvider",
+  "version": "1.5.6",
+  "load_order": "10",
+  "folder": "User",
+  "autoload": "psr-4",
+  "icon": "fa fa-users",
+  "require": {
+    "corals-settings": "^1.7",
+    "corals-foundation": "^1.7.2"
+  }
+}
