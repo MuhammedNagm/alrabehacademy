@@ -3246,20 +3246,24 @@ ul.list-login li:nth-child(2) {
 .iti-flag.np {
 	background-color: transparent; }
 
-@media screen and (min-width: 769px) {
-.side-social-list {
-	position: fixed;
-	top: 20vh;
-	z-index: 10;
-	left: 10px;
-	list-style-type: none;
-	background-color: white;
-	padding: 5px;
-	border-radius: 6px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	font-size: 24px;
-	width: 50px;
-}
-}
+  .side-social-list {
+    position: fixed;
+    top: 20vh;
+    z-index: 10;
+    left: -40px; /* Start hidden by moving off-screen */
+    list-style-type: none;
+    background-color: white;
+    padding: 5px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 24px;
+    width: 50px;
+    transition: left 0.3s ease; /* Smooth transition effect */
+  }
+
+  .side-social-list:hover {
+    left: 0px; /* Show on hover */
+  }
+
