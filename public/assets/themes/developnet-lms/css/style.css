@@ -3267,3 +3267,20 @@ ul.list-login li:nth-child(2) {
     left: 0px; /* Show on hover */
   }
 
+.side-social-list:after {
+    content: "\f054"; /* Font Awesome chevron-right icon */
+    font-family: "FontAwesome";
+    position: absolute;
+    right: -25px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    padding: 5px;
+    border-radius: 0 6px 6px 0;
+    font-size: 16px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  }
+
+  .side-social-list:hover:after {
+    opacity: 0;
+  }
