@@ -195,7 +195,11 @@ $('.select2-normal').select2({ width: '100%' });
 
     <ul class="side-social-list">
         @foreach(\Settings::get('social_links',[]) as $key=>$link)
-            <li><a href="{{ $link }}" target="_blank"><i class="fa fa-{{ $key }}"></i></a></li>
+            @php
+                $keyParts = explode('-', $key);
+                $iconClass = $keyParts[0];
+            @endphp
+            <li><a href="{{ $link }}" target="_blank"><i class="fa fa-{{ $iconClass }}"></i></a></li>
 
         @endforeach
     </ul>
