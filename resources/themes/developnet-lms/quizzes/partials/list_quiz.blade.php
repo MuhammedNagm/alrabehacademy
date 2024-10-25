@@ -1,13 +1,13 @@
 @php
 
-	$user = new \Modules\Components\LMS\Models\UserLMS;
-	if(Auth::check()){
+$user = new \Modules\Components\LMS\Models\UserLMS;
+if(Auth::check()){
 
-	$user = \Modules\Components\LMS\Models\UserLMS::find(Auth()->id());
+$user = \Modules\Components\LMS\Models\UserLMS::find(Auth()->id());
 
-	}
+}
 
-	@endphp
+@endphp
 
 
 <div class="p-course-item">
@@ -16,32 +16,32 @@
 		<div class="media-body row">
 			<div class="row">
 				<div class="">
-					<div><a href="{{ route('quizzes.show', $quiz->hashed_id) }}" @if(isset($is_plan)) target="_blank" @endif>{{$quiz->title}}</a></div>
+					<div><a href="{{ route('quizzes.show', array_merge(['quiz' => $quiz->hashed_id], isset($breadcrumb) ? ['breadcrumb' => $breadcrumb] : [])) }}" @if(isset($is_plan)) target="_blank" @endif>{{$quiz->title}}</a></div>
 					<div>
-						<p>{!!  str_limit(strip_tags($quiz->content) ,150) !!}</p>
+						<p>{!! str_limit(strip_tags($quiz->content) ,150) !!}</p>
 					</div>
 				</div>
 				<div class="col-sm-3 item-content-badges ">
-						@php
-							if($quiz->sale_price > 0){
+					@php
+					if($quiz->sale_price > 0){
 
-								$quizPrice = $quiz->sale_price;
+					$quizPrice = $quiz->sale_price;
 
-							}else{
-								$quizPrice = $quiz->price;
-							}
-						@endphp
+					}else{
+					$quizPrice = $quiz->price;
+					}
+					@endphp
 
 
-{{-- 						@if($quizPrice > 0)
+					{{-- @if($quizPrice > 0)
 
 						@if($quiz->sale_price < $quiz->price)
 						    <span class="subject-value-deleted">{{$quiz->pric}} ريال</span>
-						@endif
-						    <span class="badge badge-danger">{{$quizPrice}} ريال</span>
-						@else
-						    <span class="badge badge-success"> @lang('developnet-lms::labels.spans.span_free')</span>
-						@endif --}}
+					@endif
+					<span class="badge badge-danger">{{$quizPrice}} ريال</span>
+					@else
+					<span class="badge badge-success"> @lang('developnet-lms::labels.spans.span_free')</span>
+					@endif --}}
 				</div>
 			</div>
 		</div>
@@ -54,9 +54,9 @@
 				<small>
 
 					{{$quiz->duration}} @if($quiz->duration > 2 && $quiz->duration < 11)@lang('LMS::attributes.main.minutes') @else @lang('LMS::attributes.main.minute')
-					@endif
+						@endif
 
-				</small>
+						</small>
 			</li>
 			@endif
 			@if($quiz->questions->count())
@@ -76,7 +76,7 @@
 
 			</li>
 
-		{{-- 	<li class="text-muted text-small">
+			{{-- <li class="text-muted text-small">
 				<small>
 					<i class="fa fa-comment"></i>
   				<span>0</span>
@@ -84,7 +84,6 @@
 
 			</li> --}}
 		</ul>
-		 @include('components.favourite_action', ['module' => 'quiz', 'module_hash_id' => $quiz->hashed_id])
+		@include('components.favourite_action', ['module' => 'quiz', 'module_hash_id' => $quiz->hashed_id])
 	</div>
 </div>
-

@@ -37,83 +37,70 @@ class QuizzesController extends PublicBaseController
     public function show($hashed_id)
     {
         $id = hashids_decode($hashed_id);
-
         $quiz = Quiz::find($id);
 
         if (empty($quiz)) {
             abort(404);
         }
 
-        if ($quiz->show_in_plan) {
-            if (!auth()->check()) {
-                return redirect()->back()->with(['message' => __('LMS::messages.cannot_show_page'), 'alert_type' => 'danger']);
-            }
-
-            $user = UserLMS::find(Auth()->id());
-
-            $moduleArray = ['module' => 'quiz', 'module_id' => $quiz->id, 'user' => $user];
-            $planned = \Subscriptions::planned($moduleArray);
-
-            if ($planned['status'] < 1) {
-
-                return redirect()->back()->with(['message' => __('LMS::messages.cannot_show_page'), 'alert_type' => 'danger']);
-            }
+        // Handle breadcrumb from query params
+        $viewBreadcrumb = request()->get('breadcrumb');
+        if ($viewBreadcrumb) {
+            // Add quiz title as last item
+            $viewBreadcrumb[] = [
+                'name' => $quiz->title,
+                'link' => false
+            ];
+        } else {
+            // Use default breadcrumb
+            $viewBreadcrumb = [
+                ['name' => __('developnet-lms::labels.links.link_page_home'), 'link' => '/'],
+                ['name' => __('developnet-lms::labels.links.link_page_quizzes'), 'link' => route('quizzes.index')],
+                ['name' => $quiz->title, 'link' => false],
+            ];
         }
 
+        // Rest of your existing show method code...
         $page_title = $quiz->title;
+
         $item = [
-            'title'            => $quiz->title,
+            'title' => $quiz->title,
             'meta_description' => str_limit(strip_tags($quiz->meta_description), 500),
-            'url'              => route('courses.show', $quiz->hashed_id),
-            'type'             => 'quiz',
-            'image'            => $quiz->thumbnail,
-            'meta_keywords'    => $quiz->meta_keywords
+            'url' => route('courses.show', $quiz->hashed_id),
+            'type' => 'quiz',
+            'image' => $quiz->thumbnail,
+            'meta_keywords' => $quiz->meta_keywords
         ];
 
         $this->setSEO((object)$item);
 
-        /*******  Related Courses *********/
         $relatedIds = $quiz->categories->pluck('id')->toArray();
         $relatedQuizzes = Quiz::whereHas('categories', function ($q) use ($relatedIds) {
             $q->whereIn('id', $relatedIds);
         })->where('status', true);
-        /******* Side bar *********/
+
         $user = null;
         $subscriptionStatus = ['success' => false, 'status' => 0, 'message' => 'not subscribed'];
-        $enroll_status = false;
 
-        if (!user()) {
-            return view('quizzes.show')->with(compact(
-                'quiz',
-                'relatedQuizzes',
-                'subscriptionStatus'
-            ));
+        if (user()) {
+            $user = UserLMS::find(Auth()->id());
+            $moduleArray = [
+                'module' => 'quiz',
+                'module_id' => $id,
+                'user' => $user,
+                'parent' => [],
+            ];
+            $subscriptionStatus = \Subscriptions::check_subscription($moduleArray);
         }
-
-
-        $user = UserLMS::find(Auth()->id());
-
-        $moduleArray = [
-            'module'    => 'quiz',
-            'module_id' => $id,
-            'user'      => $user,
-            'parent'    => [],
-        ];
-
-        $subscriptionStatus = \Subscriptions::check_subscription($moduleArray);
-
-        // if($subscriptionStatus['success'] && $subscriptionStatus['status'] > 0){
-        //     \Logs::enroll($moduleArray);
-
-        // }
 
         return view('quizzes.show')->with(compact(
             'quiz',
             'relatedQuizzes',
-            'subscriptionStatus'
-
+            'subscriptionStatus',
+            'viewBreadcrumb'
         ));
     }
+
 
 
     public function show_questions($hashed_id)
@@ -487,13 +474,24 @@ class QuizzesController extends PublicBaseController
             return response()->json(['success' => true, 'view' => $view]);
         }
 
-
+        // Handle breadcrumb from query params
+        $viewBreadcrumb = request()->get('breadcrumb');
+        if ($viewBreadcrumb) {
+            // Add quiz title as last item
+            $viewBreadcrumb = json_decode(base64_decode($viewBreadcrumb), true);
+        } else {
+            // Use default breadcrumb
+            $viewBreadcrumb = [
+                ['name' => __('developnet-lms::labels.links.link_page_home'), 'link' => '/'],
+                ['name' => __('developnet-lms::labels.links.link_page_quizzes'), 'link' => route('quizzes.index')],
+                ['name' => $quiz->title, 'link' => false],
+            ];
+        }
         if ($course_id) {
-
-            return view('courses.quiz')->with(compact('quizLogs', 'quiz', 'course', 'quizTemplate', 'page_title', 'questions', 'subscriptionStatus', 'questionsList', 'remove_page', 'courseSections'));
+            return view('courses.quiz')->with(compact('quizLogs', 'quiz', 'course', 'quizTemplate', 'page_title', 'questions', 'subscriptionStatus', 'questionsList', 'remove_page', 'courseSections', 'viewBreadcrumb'));
         }
 
-        return view('quizzes.questions')->with(compact('quizLogs', 'quiz', 'course', 'quizTemplate', 'page_title', 'questions', 'subscriptionStatus', 'questionsList', 'remove_page'));
+        return view('quizzes.questions')->with(compact('quizLogs', 'quiz', 'course', 'quizTemplate', 'page_title', 'questions', 'subscriptionStatus', 'questionsList', 'remove_page', 'viewBreadcrumb'));
     }
 
 
@@ -1040,7 +1038,7 @@ class QuizzesController extends PublicBaseController
 
         // }
 
-        $percentage = ($correctAnsweredCount / ($quizQuestionsCount>0?$quizQuestionsCount:1)) * 100;
+        $percentage = ($correctAnsweredCount / ($quizQuestionsCount > 0 ? $quizQuestionsCount : 1)) * 100;
 
 
         $passed = false;
