@@ -3248,11 +3248,11 @@ ul.list-login li:nth-child(2) {
 
   .side-social-list {
     position: fixed;
-    top: 17v;
+    top: 17vh;
     z-index: 10;
     left: -40px; /* Start hidden by moving off-screen */
     list-style-type: none;
-    background-color: white;
+    background-color: white !important;
     padding: 5px;
     border-radius: 6px;
     display: flex;
@@ -3284,3 +3284,52 @@ ul.list-login li:nth-child(2) {
   .side-social-list:hover:after {
     opacity: 0;
   }
+
+  .theme-toggle {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: var(--background);
+    border: 1px solid var(--border);
+    cursor: pointer;
+}
+
+[data-theme='dark'] .light-icon {
+    display: inline-block;
+}
+
+[data-theme='dark'] .dark-icon {
+    display: none;
+}
+
+[data-theme='light'] .light-icon {
+    display: none;
+}
+
+[data-theme='light'] .dark-icon {
+    display: inline-block;
+}
+
+[data-theme='dark']  {
+
+	.page-content, .page-content, .nav.nav-tabs.custom .nav-link, :not(.ck-button label .main_span *, .ck-button input:checked + .main_span, .ck-button input:checked + .main_span *, .btn-dange, .question-meta>div *) {
+		background-color: #1a1a1a !important;
+        color : #ffffff !important;
+	}
+
+	.main_span * {
+		color: white !important;
+	}
+
+	#quiz_body img {
+		background-color: white !important;
+	}
+
+	.side-social-list { 
+	 background-color: white !important;
+	}
+	.side-social-list:hover { 
+		background-color: #1a1a1a !important;
+        color : #ffffff !important;
+	   }
+	
+}
