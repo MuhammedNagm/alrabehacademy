@@ -3246,18 +3246,90 @@ ul.list-login li:nth-child(2) {
 .iti-flag.np {
 	background-color: transparent; }
 
-.side-social-list {
-	position: fixed;
-	top: 35vh;
-	z-index: 10;
-	left: 10px;
-	list-style-type: none;
-	background-color: white;
-	padding: 5px;
-	border-radius: 6px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	font-size: 24px;
-	width: 50px;
+  .side-social-list {
+    position: fixed;
+    top: 17vh;
+    z-index: 10;
+    left: -40px; /* Start hidden by moving off-screen */
+    list-style-type: none;
+    background-color: white !important;
+    padding: 5px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 24px;
+    width: 50px;
+    transition: left 0.3s ease; /* Smooth transition effect */
+  }
+
+  .side-social-list:hover {
+    left: 0px; /* Show on hover */
+  }
+
+.side-social-list:after {
+    content: "\f054"; /* Font Awesome chevron-right icon */
+    font-family: "FontAwesome";
+    position: absolute;
+    right: -25px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    padding: 5px;
+    border-radius: 0 6px 6px 0;
+    font-size: 16px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  }
+
+  .side-social-list:hover:after {
+    opacity: 0;
+  }
+
+  .theme-toggle {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: var(--background);
+    border: 1px solid var(--border);
+    cursor: pointer;
+}
+
+[data-theme='dark'] .light-icon {
+    display: inline-block;
+}
+
+[data-theme='dark'] .dark-icon {
+    display: none;
+}
+
+[data-theme='light'] .light-icon {
+    display: none;
+}
+
+[data-theme='light'] .dark-icon {
+    display: inline-block;
+}
+
+[data-theme='dark']  {
+
+	.page-content, .page-content, .nav.nav-tabs.custom .nav-link, :not(.ck-button label .main_span *, .ck-button input:checked + .main_span, .ck-button input:checked + .main_span *, .btn-dange, .question-meta>div *) {
+		background-color: #1a1a1a !important;
+        color : #ffffff !important;
+	}
+
+	.main_span * {
+		color: white !important;
+	}
+
+	#quiz_body img {
+		background-color: white !important;
+	}
+
+	.side-social-list { 
+	 background-color: white !important;
+	}
+	.side-social-list:hover { 
+		background-color: #1a1a1a !important;
+        color : #ffffff !important;
+	   }
+	
 }

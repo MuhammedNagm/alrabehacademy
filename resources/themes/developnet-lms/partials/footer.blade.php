@@ -17,8 +17,12 @@
 
                     <ul class="btm-social-list">
                         @foreach(\Settings::get('social_links',[]) as $key=>$link)
-                            <li><a href="{{ $link }}" target="_blank"><i class="fa fa-{{ $key }}"></i></a></li>
+                             @php
+                             $keyParts = explode('_', $key);
+                             $iconClass = $keyParts[0];
+                           @endphp
 
+                            <li><a href="{{ $link }}" target="_blank"><i class="fa fa-{{ $iconClass }}"></i></a></li>
                         @endforeach
                     </ul>
                 </div>
