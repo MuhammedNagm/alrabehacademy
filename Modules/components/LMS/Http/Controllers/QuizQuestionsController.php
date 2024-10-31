@@ -2,6 +2,7 @@
 
 namespace Modules\Components\LMS\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use Modules\Foundation\Http\Controllers\BaseController;
 use Modules\Components\LMS\DataTables\QuizQuestionsDataTable;
 use Modules\Components\LMS\Http\Requests\QuizQuestionRequest;
@@ -33,12 +34,11 @@ class QuizQuestionsController extends BaseController
      */
     public function index(QuizQuestionRequest $request,Quiz $quiz, QuizQuestionsDataTable $dataTable)
     {
-                if(!$request->ajax()){
-            $session_name = 'add_bulk_questions__to_session_'.user()->hashed_id;
-            if($request->session()->has($session_name)){
+        if(!$request->ajax()) {
+            $session_name = 'add_bulk_questions__to_session_' . user()->hashed_id;
+            if ($request->session()->has($session_name)) {
                 $request->session()->forget($session_name);
             }
-           
         }
         return $dataTable->render('LMS::quiz_questions.index', compact('quiz'));
     }
@@ -96,15 +96,15 @@ class QuizQuestionsController extends BaseController
             $question_answers = [];
 
             $answers = $request->get('answers', []);
-                        if($request->get('question_type') != 'paragraph'){
+            if($request->get('question_type') != 'paragraph') {
 
 
-            foreach ($answers as $answer) {
-                $answer['question_id'] =  $question->id;
-                $question_answer = Answer::create($answer);
-                $question_answers[] = $question_answer;
+                foreach ($answers as $answer) {
+                    $answer['question_id'] = $question->id;
+                    $question_answer = Answer::create($answer);
+                    $question_answers[] = $question_answer;
+                }
             }
-        }
 
         $parent_q_id = $request->get('parent_id');
         $parent_quizzes_ids = [];
@@ -120,14 +120,14 @@ class QuizQuestionsController extends BaseController
          $all_parent_quizzes_ids = array_merge($request->get('quizzes', []),$parent_quizzes_ids);
 
         $question->quizzes()->sync($all_parent_quizzes_ids);
-        
+
         $pivot = DB::table('lms_quiz_questions')->where('quiz_id', $quiz->id)->where('question_id', $question->id);
         if($pivot){
             $pivot->update(['order' => $request->get('order')]);
         }
 
              // $question->categories()->sync($request->get('categories', []));
-     
+
 
             flash(trans('Modules::messages.success.created', ['item' => $this->title_singular]))->success();
         } catch (\Exception $exception) {
@@ -135,7 +135,7 @@ class QuizQuestionsController extends BaseController
         }
 
      if($qParagraph = $request->get('paragraph')){
-           return redirectTo($this->resource_url.'?paragraph='.$qParagraph); 
+           return redirectTo($this->resource_url.'?paragraph='.$qParagraph);
        }else{
         return redirectTo($this->resource_url);
        }
@@ -178,10 +178,10 @@ class QuizQuestionsController extends BaseController
     {
         try {
 
-             $checks = ['show_check_answer' => $request->show_check_answer?:0, 'allow_comments' => $request->allow_comments?:0, 'show_question_title' => $request->show_question_title?:0,];
+            $checks = ['show_check_answer' => $request->show_check_answer ?: 0, 'allow_comments' => $request->allow_comments ?: 0, 'show_question_title' => $request->show_question_title ?: 0,];
             $request->merge($checks);
-            
-            $data = $request->except('categories', 'answers','quizzes', 'order', 'paragraph');
+
+            $data = $request->except('categories', 'answers', 'quizzes', 'order', 'paragraph');
 
 
             $question->update($data);
@@ -190,52 +190,71 @@ class QuizQuestionsController extends BaseController
             $question_answers = [];
 
             $answers = $request->get('answers', []);
-                                    if($request->get('question_type') != 'paragraph'){
+            if ($request->get('question_type') != 'paragraph') {
 
-            foreach ($answers as $answer) {
-                $answer['question_id'] =  $question->id;
-                $question_answer = Answer::create($answer);
-                $question_answers[] = $question_answer;
-            }
-        }
-
-        $parent_q_id = $request->get('parent_id');
-        $parent_quizzes_ids = [];
-
-         if($parent_q_id && $request->get('question_type') != 'paragraph'){
-
-        $parent_quizzes_ids = Quiz::whereHas('questions', function ($q) use ($parent_q_id) {
-            $q->where('lms_questions.id', $parent_q_id);
-        })->pluck('lms_quizzes.id')->toArray();
-
-         }
-
-         $all_parent_quizzes_ids = array_merge($request->get('quizzes', []),$parent_quizzes_ids);
-
-
-        if($request->get('question_type') == 'paragraph'){
-        // $current_quizzes = $question->quizzes()->get();
-        // foreach ($current_quizzes as $quiz) {
-        //     $current_paragraph_ids = $quiz->questions()->where('parent_id', $question->id)->detach();
-        // }
-        $question->quizzes()->sync($all_parent_quizzes_ids);
-        $selected_quizzes = Quiz::whereIn('id',  $all_parent_quizzes_ids)->get();
-       $children_ids = $question->children()->pluck('lms_questions.id')->toArray();
-        foreach ($selected_quizzes as $quiz) {
-           $quiz->questions()->syncWithoutDetaching($children_ids);
+                foreach ($answers as $answer) {
+                    $answer['question_id'] = $question->id;
+                    $question_answer = Answer::create($answer);
+                    $question_answers[] = $question_answer;
+                }
             }
 
-        }else{
-            $question->quizzes()->sync( $all_parent_quizzes_ids);
+            $parent_q_id = $request->get('parent_id');
+            $parent_quizzes_ids = [];
 
-        }
+            if ($parent_q_id && $request->get('question_type') != 'paragraph') {
+
+                $parent_quizzes_ids = Quiz::whereHas('questions', function ($q) use ($parent_q_id) {
+                    $q->where('lms_questions.id', $parent_q_id);
+                })->pluck('lms_quizzes.id')->toArray();
+
+            }
+
+            $all_parent_quizzes_ids = array_merge($request->get('quizzes', []), $parent_quizzes_ids);
 
 
-             // $question->categories()->sync($request->get('categories', []));
-                    $pivot = DB::table('lms_quiz_questions')->where('quiz_id', $quiz->id)->where('question_id', $question->id);
-        if($pivot){
-            $pivot->update(['order' => $request->get('order')]);
-        }
+            if ($request->get('question_type') == 'paragraph') {
+                // $current_quizzes = $question->quizzes()->get();
+                // foreach ($current_quizzes as $quiz) {
+                //     $current_paragraph_ids = $quiz->questions()->where('parent_id', $question->id)->detach();
+                // }
+                $question->quizzes()->sync($all_parent_quizzes_ids);
+                $selected_quizzes = Quiz::whereIn('id', $all_parent_quizzes_ids)->get();
+                $children_ids = $question->children()->pluck('lms_questions.id')->toArray();
+                foreach ($selected_quizzes as $quiz) {
+                    $quiz->questions()->syncWithoutDetaching($children_ids);
+                }
+
+            } else {
+                $question->quizzes()->sync($all_parent_quizzes_ids);
+
+            }
+
+
+            // $question->categories()->sync($request->get('categories', []));
+            $pivot = DB::table('lms_quiz_questions')->where('quiz_id', $quiz->id)->where('question_id', $question->id);
+            if ($pivot) {
+                $currentOrder = $pivot->first()->order;
+                $newOrder = $request->get('order');
+                Log::info('This is an info message.'.$currentOrder);
+                if($currentOrder > $request->get('order')) {
+                    DB::table('lms_quiz_questions')
+                        ->where('quiz_id', $quiz->id)
+                        ->where('order', '>=', $newOrder)
+                        ->where('order', '<', $currentOrder)
+                        ->where('question_id', '!=',  $question->id)
+                        ->increment('order');
+                }
+                else {
+                    DB::table('lms_quiz_questions')
+                        ->where('quiz_id', $quiz->id)
+                        ->where('order', '>', $currentOrder)
+                        ->where('order', '<=', $newOrder)
+                        ->where('question_id', '!=',  $question->id)
+                        ->decrement('order');
+                }
+                $pivot->update(['order' => $request->get('order')]);
+            }
 
 
             flash(trans('Modules::messages.success.updated', ['item' => $this->title_singular]))->success();
@@ -243,11 +262,11 @@ class QuizQuestionsController extends BaseController
             log_exception($exception, Question::class, 'update');
         }
 
-        if($qParagraph = $request->get('paragraph')){
-           return redirectTo($this->resource_url.'?paragraph='.$qParagraph); 
-       }else{
-        return redirectTo($this->resource_url);
-       }
+        if ($qParagraph = $request->get('paragraph')) {
+            return redirectTo($this->resource_url . '?paragraph=' . $qParagraph);
+        } else {
+            return redirectTo($this->resource_url);
+        }
     }
 
         /**
